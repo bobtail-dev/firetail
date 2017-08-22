@@ -113,7 +113,7 @@ export class RWFireTailList extends RWFireTailBase {
   }
 }
 
-let FIRE_KEY = Symbol("fire_key");
+export let FIRE_KEY = Symbol("fire_key");
 
 class BaseSyncArray extends FireTailBase {
   constructor(refFn, init=[]) {
@@ -194,6 +194,10 @@ class BaseSyncArray extends FireTailBase {
         return base;
       }
     }
+  }
+
+  keys () {
+    return this.data.map(d => d[FIRE_KEY]);
   }
 }
 

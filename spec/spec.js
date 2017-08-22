@@ -234,6 +234,21 @@ describe('RWFireTailList', () => {
       }, 100);
     }, 100);
   });
+  fit('should emit changes', (done) => {
+    let catsCell = rx.bind(() => peopleCell.data);
+    fieldKey.set('cats2');
+    setTimeout(() => {
+      expect(Object.values(catsCell.raw())).toEqual([{name: "Maple", id: 0, age: 2}]);
+      cats.push().set({name: 'Molly', age: 18, id: 1});
+      setTimeout(() => {
+        expect(Object.values(catsCell.raw())).toEqual([
+          {name: "Maple", id: 0, age: 2},
+          {name: 'Molly', age: 18, id: 1}
+        ]);
+        done();
+      }, 100);
+    }, 100);
+  });
 });
 
 describe('primitives', () => {
@@ -371,6 +386,19 @@ describe("DepSyncArray", () => {
           done();
         }, 100);
       });
+    }, 100);
+  });
+  fit('should emit change events correctly', (done) => {
+    let valsCell = rx.bind(() => _.chain(readArray.data).values().sortBy(_.identity).value());
+    expect(valsCell.raw()).toEqual([5, 6, 7, 8, 9]);
+    values.push().set(10);
+    setTimeout(() => {
+      expect(valsCell.raw()).toEqual([6, 7, 8, 9, 10]);
+      values.push().set(11);
+      setTimeout(() => {
+        expect(valsCell.raw()).toEqual([7, 8, 9, 10, 11]);
+        done();
+      }, 100);
     }, 100);
   });
 });
